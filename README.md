@@ -20,7 +20,9 @@ Voxel Model Importer, Cleaner & Exporter, an add-on for Blender 4.2+!
 \
 \
 **Some other features -**
-**Shared UV Clean** - All the models are joined, treated as a single Object for the whole process and Split up again. This leads them to have a single baked texture. 
+\
+**Shared UV Clean** - All the models are joined, treated as a single Object for the whole process and Split up again. This leads them to have a single baked texture.
+\
 Besides this, there is a **2-Step Process** that provides more control over the UV process. 
 \
 \
