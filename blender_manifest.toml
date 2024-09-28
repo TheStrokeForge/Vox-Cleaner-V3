@@ -1,0 +1,17 @@
+schema_version = "1.0.0"
+id = "vox_cleaner_v3"
+name = "Vox Cleaner V3"
+version = "3.0.0"
+tagline = "Voxel Suite for Blender. Import, Clean & Export models in 1 click"
+maintainer = "Farhan Shaikh <thestrokeforge@gmail.com>"
+type = "add-on"
+tags = ["Import-Export", "Game Engine","Mesh", "Pipeline","Mesh"]
+blender_version_min = "4.2.0"
+license = ["SPDX:GPL-3.0-or-later"]
+website = "https://www.thestrokeforge.xyz/vox-cleaner"
+copyright = [
+	 "2021-2024 Farhan Shaikh",
+   "2021 TheStrokeForge"
+]
+[permissions]
+files = "Import MagicaVoxel .vox files"
