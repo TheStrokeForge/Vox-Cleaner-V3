@@ -2519,6 +2519,12 @@ class LazyClean(bpy.types.Operator):
                 CleanPercentageArray.append(round(100-(FlowData.VertexCountFinalX*100/FlowData.VertexCountInitialX),1))
 
                 VoxMethods.EndProcess(context)
+
+            # select the object
+            bpy.context.view_layer.objects.active = None
+            bpy.context.view_layer.objects.active = ObjArray[0]
+            bpy.ops.object.select_all(action='DESELECT')
+            ObjArray[0].select_set(True)
                 
 
             #Give out a feedback
