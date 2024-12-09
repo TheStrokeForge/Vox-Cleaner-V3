@@ -19,21 +19,7 @@ Read more about the license: https://spdx.org/licenses/GPL-3.0-or-later.html
 
 Thanks so much for your purchase and please feel free to tag me @TheStrokeForge on Instagram/Twitter & I’d love to see your work! Cheers!
 
-'''
-
-bl_info = {
-    "name": "Vox Cleaner V3",
-    "author": "Farhan Shaikh",
-    "version": (3, 0),
-    "blender": (4 ,2 , 0),
-    "location": "View3D > Sidebar/N-Panel > Vox Cleaner Pro",
-    "description": "A Voxel Suite that can handle everything from .Vox Imports, Single-click Model Cleaning, & Model Exports",
-    "warning": "",
-    "doc_url": "https://www.thestrokeforge.xyz/vox-cleaner",
-    "tracker_url": "https://thestrokeforge.gumroad.com/l/Vox-Cleaner-V3",
-    "category": "Voxel Suite",
-    }
-    
+''' 
 
 import os, sys, subprocess
 
@@ -142,7 +128,7 @@ class StaticData:
     VerticalSplitFactor = 0.5
 
 
-class MyProperties(bpy.types.PropertyGroup):
+class VoxProperties(bpy.types.PropertyGroup):
     # Clean related ###########################################################################################################################################################################################################################
     BaseColor : bpy.props.FloatVectorProperty(name='',subtype='COLOR_GAMMA',size=4, min=0.0, max=1.0, precision=4, default = StaticData.BaseColorDefault, description="""Base color of the generated image.
 Set this to white before cleaning, if you wish to pixel texture paint on the model!
@@ -313,7 +299,7 @@ class VoxelObject:
     def generate(self, file_name, palette, materials, collections,TransformMatrix4x4):
         objects = []
         
-        mytool = bpy.context.scene.my_tool
+        mytool = bpy.context.scene.vox_tool
 
         self.materials = materials  # For helper functions.
         
@@ -626,7 +612,7 @@ class ImportVox(Operator, ImportHelper):
 
         def import_vox(path):
             
-            mytool = bpy.context.scene.my_tool
+            mytool = bpy.context.scene.vox_tool
 
             def IntTo3x3Matrix(rotation):
 
@@ -1096,7 +1082,7 @@ class ImportVox(Operator, ImportHelper):
         return {"FINISHED"}
 
     def draw(self, context):
-        mytool = bpy.context.scene.my_tool
+        mytool = bpy.context.scene.vox_tool
         
         layout = self.layout
 
@@ -1152,7 +1138,7 @@ class VoxMethods():
     def MrChecker(context):
         #Checks whether the selected 'things' are cleanable and exportable. Realtime.
         #Outputs in the form of CleaningStatus, StepStatus, ExportStatus
-        mytool = context.scene.my_tool
+        mytool = context.scene.vox_tool
 
         # Check for object mode
         if bpy.context.mode == 'OBJECT': pass
@@ -1274,7 +1260,7 @@ class VoxMethods():
         #Gives out a summary of what I'm about to export along with the number of textures.
 
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
         CleanStatus,StepStatus, ExportStatus = VoxMethods.MrChecker(context)
 
         if type(ExportStatus) == int:
@@ -1314,7 +1300,7 @@ class VoxMethods():
         bpy.ops.object.mode_set(mode = 'OBJECT')
 
     def CreateCRMETS(context,C,R,M,E,T):
-        mytool = bpy.context.scene.my_tool
+        mytool = bpy.context.scene.vox_tool
 
         # calculate the name for the CRMET material
         MaterialName = "VCMat"
@@ -1516,7 +1502,7 @@ class VoxMethods():
     
     def ApplySplitToBothObjects(context):
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
         #If no backup, just add the dupe to the global list
         if mytool.CreateBackup == False: FlowData.CommonUVDupeObjects = [FlowData.DupeObj]
         else:
@@ -1592,7 +1578,7 @@ class VoxMethods():
     def MaterialSetUp(context):
         
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
 
         # analyse the current material on MainObj. make a bakelist based on the colAtt nodes present
         for mat in FlowData.MainObj.data.materials:
@@ -1709,7 +1695,7 @@ class VoxMethods():
     def UVProjection(context):
 
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
         
         bpy.ops.object.select_all(action='DESELECT')
         
@@ -1903,7 +1889,7 @@ class VoxMethods():
 
     def UVScaling(context):
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
         #actually scale the UVs according to ScaleFactor n cursor location-------------------------------------can be done with lighter detail
 
         bpy.ops.object.mode_set(mode = 'EDIT')
@@ -2017,7 +2003,7 @@ class VoxMethods():
         #CRMET material on Dupe(detect using presence of image texture nodes) - bake all channels present 
 
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
 
         # Copy Bake settings
         RenderEngine = bpy.context.scene.render.engine
@@ -2174,7 +2160,7 @@ class VoxMethods():
     def EndProcess(context):
 
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
         
         #clear existing VColor Data in the object if it exists
         try:
@@ -2303,7 +2289,7 @@ class VoxMethods():
         #Get a list of exportable textures on a model ready. No duplicates. 
         
         NodeList = []
-        mytool = context.scene.my_tool
+        mytool = context.scene.vox_tool
 
         def CheckforTexturesWithinModels(obj,MapKey):
             try:
@@ -2335,7 +2321,7 @@ class VoxMethods():
     def TextureExport(context):
 
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
 
         NodeList = VoxMethods.GetTextures(context)
         
@@ -2402,7 +2388,7 @@ class LazyClean(bpy.types.Operator):
 
     def execute(self, context):
         
-        mytool = context.scene.my_tool
+        mytool = context.scene.vox_tool
         CleanStatus,StepStatus,ExportStatus = VoxMethods.MrChecker(context)
         
         if type(CleanStatus) == int:
@@ -2553,7 +2539,7 @@ class PrepareForBake(bpy.types.Operator):
     bl_options = {'UNDO'}
 
     def execute(self, context):
-        mytool = context.scene.my_tool
+        mytool = context.scene.vox_tool
         CleanStatus,StepStatus,ExportStatus = VoxMethods.MrChecker(context)
         
         # warnings & errors
@@ -2663,7 +2649,7 @@ Might take some time depending on the model's voxel density"""
     bl_options = {'UNDO'}
 
     def execute(self, context):
-        mytool = context.scene.my_tool
+        mytool = context.scene.vox_tool
         CleanStatus,StepStatus,ExportStatus = VoxMethods.MrChecker(context)
 
         # warnings & errors
@@ -2727,7 +2713,7 @@ class OpenExportFolder(bpy.types.Operator):
 
     def execute(self, context):
 
-        mytool = context.scene.my_tool
+        mytool = context.scene.vox_tool
 
         if len(mytool.ExportLocation) == 0:
             self.report({'WARNING'}, 'Please add an export folder')
@@ -2765,7 +2751,7 @@ class ExportOBJ(bpy.types.Operator):
     def execute(self, context):
         
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
         
         #Directory checks
         if len(mytool.ExportLocation) <= 0:
@@ -2855,7 +2841,7 @@ class ExportFBX(bpy.types.Operator):
     def execute(self, context):
         
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
         
         #Directory checks
         if len(mytool.ExportLocation) <= 0:
@@ -2940,7 +2926,7 @@ class ResetSettings(bpy.types.Operator):
 
     def execute(self, context):
 
-        mytool = context.scene.my_tool
+        mytool = context.scene.vox_tool
         mytool.BaseColor = StaticData.BaseColorDefault
         mytool.AlphaBool = StaticData.AlphaDefault
         mytool.ResolutionSet = StaticData.ResolutionDefault
@@ -3014,7 +3000,7 @@ class VoxClean(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
         
         # Apply Vert Colors button
         ShowVertexColorsButton = False
@@ -3185,7 +3171,7 @@ class VoxExport(bpy.types.Panel):
         layout = self.layout
 
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
 
         #Export Location & Open Folder
         col = layout.column()
@@ -3285,7 +3271,7 @@ class VoxSettings(bpy.types.Panel):
         layout.use_property_split = True
 
         scene = context.scene
-        mytool = scene.my_tool
+        mytool = scene.vox_tool
         
         # Model Settings Panel
         col = layout.column()
@@ -3406,7 +3392,7 @@ class VoxSettings(bpy.types.Panel):
 
 
 
-classes = [ApplyVColors,MyProperties,LazyClean,PrepareForBake,PostUVBake,VoxTerminate,VoxImport,VoxClean,VoxExport,VoxSettings,ImportVox,ExportOBJ,ExportFBX,OpenExportFolder,ResetSettings,CheckForUpdates]
+classes = [ApplyVColors,VoxProperties,LazyClean,PrepareForBake,PostUVBake,VoxTerminate,VoxImport,VoxClean,VoxExport,VoxSettings,ImportVox,ExportOBJ,ExportFBX,OpenExportFolder,ResetSettings,CheckForUpdates]
  
 def menu_func_import(self, context):
     self.layout.operator(ImportVox.bl_idname, icon = "FILE_3D",text="MagicaVoxel (.vox)")
@@ -3416,11 +3402,11 @@ def register():
     for cls in classes:
         bpy.utils.register_class(cls)
     bpy.types.TOPBAR_MT_file_import.append(menu_func_import)
-    bpy.types.Scene.my_tool = bpy.props.PointerProperty(type= MyProperties)
+    bpy.types.Scene.vox_tool = bpy.props.PointerProperty(type= VoxProperties)
 
         
 def unregister():
-    del bpy.types.Scene.my_tool
+    del bpy.types.Scene.vox_tool
     bpy.types.TOPBAR_MT_file_import.remove(menu_func_import)
     for cls in classes:
         bpy.utils.unregister_class(cls)
