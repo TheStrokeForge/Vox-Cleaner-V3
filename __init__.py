@@ -1223,7 +1223,7 @@ class VoxMethods():
                     for e in bm.edges:
                         EdgeAngle = round(math.degrees(e.calc_face_angle()),3)
                         
-                        if EdgeAngle == 0.0 or 89 < EdgeAngle < 91:
+                        if -0.02 < EdgeAngle <= 0.02 or 89 < EdgeAngle < 91:
                             continue
                         elif 44 < EdgeAngle < 46.0 or 0 < EdgeAngle < 1 or 34 < EdgeAngle < 36 or 53 < EdgeAngle < 55 or 70 < EdgeAngle < 71:
                             Type = "MC"
